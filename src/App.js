@@ -1,4 +1,5 @@
 // App.js
+import { editableInputTypes } from '@testing-library/user-event/dist/utils';
 import React from 'react';
 
 class App extends React.Component {
@@ -6,7 +7,7 @@ class App extends React.Component {
     isAddRecipeFormDisplayed: false,
     recipes: [],
     newRecipeName: "",
-    newRecipeInstructions: ""
+    newRecipeInstructions: "",
   }
 
 
@@ -24,15 +25,31 @@ class App extends React.Component {
 
   submitRecipe = (event) => {
     event.preventDefault()
-    this.setState({recipes: [
-        {
-          name: this.state.newRecipeName,
-          instructions :this.state.newRecipeInstructions
-        }
-      ]
+    let newRecipe=
+    {
+      name: this.state.newRecipeName,
+      instructions :this.state.newRecipeInstructions
+    };
+
+    this.setState({recipes: [newRecipe, ...this.state.recipes]})
+
+    this.setState({
+      newRecipeName:'',
+      newRecipeInstructions: "",
     })
+
   }
+
+  // clear = () => {
+  //   this.setState({
+  //     newRecipeName:'',
+  //     newRecipeInstructions: "",
+  //   })
+  // }
+
   // ...
+
+
   render(){
     const addNewRecipeForm = (
         <form id="recipe-form" onSubmit={this.submitRecipe} >
@@ -48,7 +65,7 @@ class App extends React.Component {
             placeholder="write recipe instructions here..."
             onChange={this.handleChange}
             value={this.state.newRecipeInstructions} />
-          <input type="submit" />
+          <button >Submit</button>
         </form>
       )
 
@@ -63,7 +80,7 @@ class App extends React.Component {
           {
             this.state.recipes.length > 0 ?
             <ul>
-              <li>{ this.state.recipes[0].name }</li>
+              {this.state.recipes.map(recipe => <li key={recipe.name}> { recipe.name } </li>)}
             </ul> :
             <p>There are no recipes to list.</p>
           }

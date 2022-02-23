@@ -36,4 +36,23 @@ describe("Home page", () => {
       })
   })
 
+  it("displays all recipe names under the 'My Recipes' heading after they have been added through the 'Add Recipe' form", () => {
+    const recipeName = 'Tofu Scramble Tacos';
+    const recipe2Name = 'Not Gross Tacos';
+    cy.findByRole('button').click()
+    cy.findByRole('textbox', {name: /Recipe name/i}).type(recipeName)
+    cy.findByRole('textbox', {name: /instructions/i}).type("1. heat a skillet on medium with a dollop of coconut oil {enter} 2. warm flour tortillas")
+
+    cy.findByRole('button').click()
+
+    cy.findByRole('textbox', {name: /Recipe name/i}).type(recipe2Name)
+    cy.findByRole('textbox', {name: /instructions/i}).type("1. heat a skillet on medium with a dollop of coconut oil {enter} 2. warm flour tortillas")
+
+    return cy.findByRole('button').click()
+      .then(() => {
+      expect(cy.findAllByRole('listitem', /tofu scramble tacos/i)).toExist();
+      expect(cy.findAllByRole('listitem', /not gross tacos/i)).toExist();
+      })
+  })
+
 })
